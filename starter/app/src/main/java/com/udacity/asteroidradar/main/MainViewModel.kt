@@ -1,66 +1,80 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.Constants
-import com.udacity.asteroidradar.PictureOfDay
+import com.udacity.asteroidradar.ImageOfTheDay
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApi
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.database.getDatabase
+import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
 
+/** The status of an api call */
 enum class AsteroidApiStatus { LOADING, ERROR, DONE }
 
+/** The logic for the main fragment. */
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
-    // The internal MutableLiveData that stores the status of the most recent request
+    /** internal status of the image of the day api call*/
     private val _status = MutableLiveData<AsteroidApiStatus>()
 
-    // The external immutable LiveData for the request status
+    /** Status of the api call to retrieve asteroid data*/
     val status: LiveData<AsteroidApiStatus>
         get() = _status
 
-    // The internal MutableLiveData that stores the status of the most recent request
+    /** Internal status of the image of the day api call to*/
     private val _imageStatus = MutableLiveData<AsteroidApiStatus>()
 
-    // The external immutable LiveData for the request status
+    /** Status of the image of the day api call to*/
     val imageStatus: LiveData<AsteroidApiStatus>
         get() = _imageStatus
 
-    // The internal MutableLiveData that stores the status of the most recent request
-    private val _imageOfTheDay = MutableLiveData<PictureOfDay>()
+    /** Internal image of the day data*/
+    private val _imageOfTheDay = MutableLiveData<ImageOfTheDay>()
 
-    // The external immutable LiveData for the request status
-    val imageOfTheDay: LiveData<PictureOfDay>
+    /** Image of the day data*/
+    val imageOfTheDay: LiveData<ImageOfTheDay>
         get() = _imageOfTheDay
 
-    // The internal MutableLiveData that stores the status of the most recent request
-    private val _asteroids = MutableLiveData<List<Asteroid>>()
-
-    // The external immutable LiveData for the request status
-    val asteroids: LiveData<List<Asteroid>>
-        get() = _asteroids
-
-    // The internal MutableLiveData that stores the status of the most recent request
+    /** Internal selected asteroid*/
     private val _asteroidToNavigateTo = MutableLiveData<Asteroid>()
 
-    // The external immutable LiveData for the request status
+    /** Selected asteroid*/
     val asteroidToNavigateTo: LiveData<Asteroid>
         get() = _asteroidToNavigateTo
 
+    // Get the database and repository to interact with the asteroid data
+    private val database = getDatabase(app)
+    private val asteroidRepository = AsteroidRepository(database)
+
+    // The external LiveData for the asteroids to display
+    val asteroids = asteroidRepository.asteroids
+
     init {
-        getAsteroidData(app)
+        // Get the asteroid data for the next 7 days from the api and insert it into the database
+        viewModelScope.launch {
+            try {
+                asteroidRepository.refreshAsteroidData(app.applicationContext.getString(R.string.apiToken))
+                _status.value = AsteroidApiStatus.DONE
+            } catch (e: Exception) {
+                _status.value = AsteroidApiStatus.ERROR
+            }
+        }
+
+        // Get the latest asteroid data from the database
+        viewModelScope.launch {
+            asteroidRepository.getWeeksAsteroids()
+        }
+
+        // Retrieve the image of the day data from the api
         getImageOfTheDay(app)
     }
 
+    /** Retrieves the image of the day data from the NASA api*/
     private fun getImageOfTheDay(app: Application) {
         _imageStatus.value = AsteroidApiStatus.LOADING
 
@@ -76,38 +90,45 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    private fun getAsteroidData(app: Application) {
-
-        val calendar = Calendar.getInstance()
-        val currentTime = calendar.time
-        val dateFormat =
-            SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
-
-        _status.value = AsteroidApiStatus.LOADING
-
-        viewModelScope.launch {
-            try {
-                var response = AsteroidApi.retrofitService.getAsteroids(
-                    dateFormat.format(currentTime),
-                    app.applicationContext.getString(R.string.apiToken)
-                )
-                val jsonObject = JSONObject(response)
-                _asteroids.value = parseAsteroidsJsonResult(jsonObject)
-                _status.value = AsteroidApiStatus.DONE
-            } catch (e: Exception) {
-                Log.i("MainViewModel", e.message.toString())
-                _status.value = AsteroidApiStatus.ERROR
-                _asteroids.value = ArrayList()
-            }
-        }
-    }
-
+    /** Set the asteroid that was selected to display more details about*/
     fun displayAsteroidDetails(asteroid: Asteroid) {
         _asteroidToNavigateTo.value = asteroid
     }
 
+    /** Signifies the details of the selected asteroid have been displayed*/
     fun displayAsteroidDataComplete() {
         _asteroidToNavigateTo.value = null
+    }
+
+    /** Filter the asteroids to display to only those with a close approach of today*/
+    fun showTodaysAsteroids() {
+        viewModelScope.launch {
+            asteroidRepository.getTodaysAsteroids()
+        }
+    }
+
+    /** Filter the asteroids to display to only those with a close approach within the next 7 days*/
+    fun showWeeksAsteroids() {
+        viewModelScope.launch {
+            asteroidRepository.getWeeksAsteroids()
+        }
+    }
+
+    /** Retrieve all asteroids in the database*/
+    fun showAllAsteroids() {
+        viewModelScope.launch {
+            asteroidRepository.getAllAsteroids()
+        }
+    }
+
+    /** denotes the asteroid api issue has been displayed*/
+    fun displayAsteroidApiIssueComplete() {
+        _status.value = AsteroidApiStatus.DONE
+    }
+
+    /** denotes the image of the day api issue has been displayed*/
+    fun displayImageApiIssueComplete() {
+        _imageStatus.value = AsteroidApiStatus.DONE
     }
 
 }

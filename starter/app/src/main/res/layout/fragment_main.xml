@@ -12,14 +12,14 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/app_background">
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/activity_main_image_of_the_day_layout"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="@dimen/image_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -36,15 +36,13 @@
 
             <TextView
                 android:id="@+id/textView"
+                style="@style/CustomHeadText5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="#55010613"
-                android:padding="16dp"
-                android:text="@string/image_of_the_day"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:background="@color/textBackground"
+                android:padding="@dimen/large_spacing"
+                android:text="@string/image_of_the_day" />
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -59,19 +57,8 @@
             app:layout_constraintTop_toBottomOf="@+id/activity_main_image_of_the_day_layout"
             app:layout_constraintVertical_bias="0.0"
             app:listData="@{viewModel.asteroids}"
-            tools:itemCount="10"
-            tools:listitem="@layout/asteroid_list_item"/>
+            tools:itemCount="@string/preview_list_item_count"
+            tools:listitem="@layout/asteroid_list_item" />
 
-        <ProgressBar
-            android:id="@+id/status_loading_wheel"
-            asteroidApiStatus="@{viewModel.status}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
