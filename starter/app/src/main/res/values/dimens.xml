@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="normal_spacing">8dp</dimen>
+    <dimen name="large_spacing">16dp</dimen>
+    <dimen name="small_spacing">4dp</dimen>
+    <dimen name="large_text">18sp</dimen>
+    <dimen name="image_height">220dp</dimen>
+    <dimen name="header_text">20sp</dimen>
+</resources>
