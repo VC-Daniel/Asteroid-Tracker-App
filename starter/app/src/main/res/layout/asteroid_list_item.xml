@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -9,40 +8,39 @@
         <variable
             name="asteroid"
             type="com.udacity.asteroidradar.Asteroid" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        tools:background="@color/app_background">
+        android:padding="@dimen/large_spacing">
 
         <TextView
             android:id="@+id/asteroid_name"
+            style="@style/CustomHeadline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{asteroid.codename}"
-            android:textColor="@color/default_text_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="(2015 xk351)" />
+            tools:text="@string/sample_asteroid_name" />
 
         <TextView
             android:id="@+id/proximity_date"
+            style="@style/CustomTextBody1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/normal_spacing"
             android:text="@{asteroid.closeApproachDate}"
-            android:textColor="@color/default_text_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/asteroid_name"
             app:layout_constraintTop_toBottomOf="@+id/asteroid_name"
-            tools:text="2020-02-08" />
+            tools:text="@string/sample_close_approach_date" />
 
         <ImageView
             android:id="@+id/danger_status"
             statusIcon="@{asteroid.potentiallyHazardous}"
+            statusIconContentDescription="@{asteroid.potentiallyHazardous}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

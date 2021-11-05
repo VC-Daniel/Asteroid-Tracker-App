@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.databinding.AsteroidListItemBinding
 
-class AsteroidListAdapter(val onClickListener: OnClickListener) :
+/** Display an overview of asteroid items. Asteroid overviews can be selected*/
+class AsteroidListAdapter(private val onClickListener: OnClickListener) :
     ListAdapter<Asteroid, AsteroidListAdapter.ViewHolder>(DiffCallBack) {
+
+    /** Define how to compare asteroids */
     companion object DiffCallBack : DiffUtil.ItemCallback<Asteroid>() {
         override fun areItemsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
             return oldItem == newItem
@@ -20,23 +23,37 @@ class AsteroidListAdapter(val onClickListener: OnClickListener) :
         }
     }
 
+    /** The view holder for a single asteroid overview*/
     class ViewHolder(private var binding: AsteroidListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        // The asteroid data is displayed from the asteroid bound to the view
         fun bind(asteroid: Asteroid) {
             binding.asteroid = asteroid
             binding.executePendingBindings()
         }
     }
 
+    /** Create a view holder to display an overview of an asteroid*/
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
-        return ViewHolder(AsteroidListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        return ViewHolder(
+            AsteroidListItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        // get the asteroid that corresponds to this view holder
         val asteroid = getItem(position)
         holder.itemView.setOnClickListener {
             onClickListener.onClick(asteroid)
         }
+
+        // set the asteroid to display an overview of
         holder.bind(asteroid)
     }
 
