@@ -1,11 +1,37 @@
 <resources>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
+        <item name="colorOnPrimary">@color/primaryTextColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/secondaryTextColor</item>
+        <item name="textAppearanceHeadline6">@style/CustomHeadline6</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorTertiary">@color/primaryTextColor</item>
     </style>
 
+    <!-- Use for titles and items you want to stand out. -->
+    <style name="CustomHeadline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">@dimen/large_text</item>
+    </style>
+
+    <!-- Use for large headers -->
+    <style name="CustomHeadText5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textSize">@dimen/header_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Use for sub body text that should not be too prominent -->
+    <style name="CustomTextBody1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/primaryLightColor</item>
+    </style>
+
+    <!-- Logic based off of an answer on StackOverflow: https://stackoverflow.com/a/42373688 -->
+    <!-- Use for an alert dialog with noticeable navigation buttons -->
+    <style name="AlertDialogTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/primaryTextColor</item>
+    </style>
 </resources>
