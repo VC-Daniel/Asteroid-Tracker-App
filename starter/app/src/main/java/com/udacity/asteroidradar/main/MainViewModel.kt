@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.ImageOfTheDay
-import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidRepository
@@ -58,7 +58,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         // Get the asteroid data for the next 7 days from the api and insert it into the database
         viewModelScope.launch {
             try {
-                asteroidRepository.refreshAsteroidData(app.applicationContext.getString(R.string.apiToken))
+                asteroidRepository.refreshAsteroidData(BuildConfig.NASA_API_KEY)
                 _status.value = AsteroidApiStatus.DONE
             } catch (e: Exception) {
                 _status.value = AsteroidApiStatus.ERROR
@@ -71,17 +71,17 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
 
         // Retrieve the image of the day data from the api
-        getImageOfTheDay(app)
+        getImageOfTheDay()
     }
 
     /** Retrieves the image of the day data from the NASA api*/
-    private fun getImageOfTheDay(app: Application) {
+    private fun getImageOfTheDay() {
         _imageStatus.value = AsteroidApiStatus.LOADING
 
         viewModelScope.launch {
             try {
                 _imageOfTheDay.value = AsteroidApi.retrofitService.getImageOfTheDay(
-                    app.applicationContext.getString(R.string.apiToken)
+                    BuildConfig.NASA_API_KEY
                 )
                 _imageStatus.value = AsteroidApiStatus.DONE
             } catch (e: Exception) {

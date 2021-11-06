@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.work
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.repository.AsteroidRepository
@@ -19,7 +20,7 @@ class RefreshAsteroidDataWorker(appContext: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         val database = getDatabase(applicationContext)
         val repository = AsteroidRepository(database)
-        val apiToken = applicationContext.getString(R.string.apiToken)
+        val apiToken = BuildConfig.NASA_API_KEY
 
         // get the latest data and remove old data
         return try {
