@@ -79,9 +79,9 @@ This branch is going to let you start working with it. The command to check out 
 git checkout master
 ```
 
-**Step 3: You must add an apiToken string resource with your NASA api token in order for the app to build correctly**
+**Step 3: Add your apiToken to the gradle properties**
 
-It is recommended that you add this string resource in a new resources file that is not checked into source code so you don't accidentally expose your private api token. See below for instructions on generating a NASA NeoWS (Near Earth Object Web Service) api token
+Add a property named myApiNasa with your api token to gradle.properties. For example myApiNasa="123abc". See below for instructions on generating a NASA NeoWS (Near Earth Object Web Service) api token
 
 **Step 4: Run the project and check that it compiles correctly**
 
