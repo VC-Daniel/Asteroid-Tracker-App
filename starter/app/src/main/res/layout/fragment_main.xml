@@ -42,7 +42,7 @@
                 android:layout_gravity="bottom"
                 android:background="@color/textBackground"
                 android:padding="@dimen/large_spacing"
-                android:text="@string/image_of_the_day" />
+                android:text="@{viewModel.imageOfTheDay.title}" />
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
