@@ -56,6 +56,8 @@ implementation "android.arch.work:work-runtime-ktx:1.0.1"
 testImplementation 'junit:junit:4.12'
 androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+// Material design components
+implementation "com.google.android.material:material:1.1.0-alpha04"
 ```
 
 ### Installation
@@ -77,21 +79,14 @@ This branch is going to let you start working with it. The command to check out 
 git checkout master
 ```
 
-**Step 3: Run the project and check that it compiles correctly**
+**Step 3: You must add an apiToken string resource with your NASA api token in order for the app to build correctly**
+
+It is recommended that you add this string resource in a new resources file that is not checked into source code so you don't accidentally expose your private api token. See below for instructions on generating a NASA NeoWS (Near Earth Object Web Service) api token
+
+**Step 4: Run the project and check that it compiles correctly**
 
 Open the project in Android Studio and click the Run ‘app’ button, check that it runs correctly and you can see the app in your device or emulator.
 
-## Testing
-
-Explain the steps needed to run any automated tests
-
-### Break Down Tests
-
-Explain what each test does and why
-
-```
-Examples here
-```
 ## Project Instructions
 
 You will be provided with a starter code, which includes the necessary dependencies and plugins that you have been using along the courses and that you are going to need to complete this project. 
